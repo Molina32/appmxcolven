@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/usuario_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etUsuarioNuevo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/usuario_hint"
+            android:inputType="textPersonName"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/nombre_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etNombreNuevo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nombre_hint"
+            android:inputType="textCapWords"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/apellido_paterno_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etApellidoPaternoNuevo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/apellido_paterno_hint"
+            android:inputType="textCapWords"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/apellido_materno_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etApellidoMaternoNuevo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/apellido_materno_hint"
+            android:inputType="textCapWords"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/correo_electronico_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etCorreoNuevo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/correo_electronico_hint"
+            android:inputType="textEmailAddress"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/contrasena_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etContrasenaNueva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contrasena_hint"
+            android:inputType="textPassword"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/confirmar_contrasena_hint"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etConfirmarContrasenaNueva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirmar_contrasena_hint"
+            android:inputType="textPassword"
+            android:minHeight="40dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/rol_label"
+            android:textSize="12sp" />
+
+        <Spinner
+            android:id="@+id/spRolNuevo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp" />
+
+    </LinearLayout>
+</ScrollView>
