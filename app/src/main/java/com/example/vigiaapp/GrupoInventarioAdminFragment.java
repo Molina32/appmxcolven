@@ -439,7 +439,7 @@ public class GrupoInventarioAdminFragment extends Fragment {
             return;
         }
 
-        apiService.guardarRegistroGrupo(obtenerIdentificadorGrupo(), valores).enqueue(new Callback<Void>() {
+        apiService.guardarRegistroGrupo(obtenerIdentificadorGrupo(), obtenerUsuarioIdSesion(), valores).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (!isAdded()) {
@@ -499,6 +499,7 @@ public class GrupoInventarioAdminFragment extends Fragment {
 
         apiService.actualizarColumnasGrupo(
                 obtenerIdentificadorGrupo(),
+                obtenerUsuarioIdSesion(),
                 new ActualizarColumnasGrupoRequest(columnasActualizadas)
         ).enqueue(new Callback<Void>() {
             @Override
@@ -556,7 +557,7 @@ public class GrupoInventarioAdminFragment extends Fragment {
             return;
         }
 
-        apiService.actualizarRegistroGrupo(obtenerIdentificadorGrupo(), registroId, valores)
+        apiService.actualizarRegistroGrupo(obtenerIdentificadorGrupo(), registroId, obtenerUsuarioIdSesion(), valores)
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -595,6 +596,7 @@ public class GrupoInventarioAdminFragment extends Fragment {
 
         apiService.actualizarColumnasGrupo(
                 obtenerIdentificadorGrupo(),
+                obtenerUsuarioIdSesion(),
                 new ActualizarColumnasGrupoRequest(columnasActualizadas)
         ).enqueue(new Callback<Void>() {
             @Override
@@ -872,7 +874,7 @@ public class GrupoInventarioAdminFragment extends Fragment {
             return;
         }
 
-        apiService.eliminarRegistroGrupo(obtenerIdentificadorGrupo(), registroId)
+        apiService.eliminarRegistroGrupo(obtenerIdentificadorGrupo(), registroId, obtenerUsuarioIdSesion())
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -912,9 +914,22 @@ public class GrupoInventarioAdminFragment extends Fragment {
             return;
         }
 
+        Long usuarioId = obtenerUsuarioIdSesion();
+        if (usuarioId == null) {
+            resolverYGuardarUsuarioId(() -> ejecutarActualizarStockEnApi(registroId, delta));
+            return;
+        }
+        ejecutarActualizarStockEnApi(registroId, delta);
+    }
+
+    private void ejecutarActualizarStockEnApi(long registroId, int delta) {
+        if (apiService == null) {
+            return;
+        }
+        Long usuarioId = obtenerUsuarioIdSesion();
         Call<LinkedHashMap<String, Object>> call = delta > 0
-                ? apiService.aumentarStockRegistro(obtenerIdentificadorGrupo(), registroId)
-                : apiService.reducirStockRegistro(obtenerIdentificadorGrupo(), registroId);
+                ? apiService.aumentarStockRegistro(obtenerIdentificadorGrupo(), registroId, usuarioId)
+                : apiService.reducirStockRegistro(obtenerIdentificadorGrupo(), registroId, usuarioId);
 
         call.enqueue(new Callback<LinkedHashMap<String, Object>>() {
                     @Override
@@ -925,15 +940,6 @@ public class GrupoInventarioAdminFragment extends Fragment {
                         }
 
                         if (response.isSuccessful()) {
-                            StockHistoryManager.registrarMovimiento(
-                                    requireContext(),
-                                    valorSeguro(nombreGrupo),
-                                    articuloHistorial,
-                                    delta > 0 ? getString(R.string.historial_tipo_aumento) : getString(R.string.historial_tipo_reduccion),
-                                    Math.abs(delta),
-                                    stockAnterior,
-                                    stockNuevo
-                            );
                             cargarRegistrosDesdeApi();
                         } else {
                             Toast.makeText(requireContext(),
@@ -1055,6 +1061,7 @@ public class GrupoInventarioAdminFragment extends Fragment {
 
         apiService.actualizarColumnasGrupo(
                 obtenerIdentificadorGrupo(),
+                obtenerUsuarioIdSesion(),
                 new ActualizarColumnasGrupoRequest(columnasActualizadas)
         ).enqueue(new Callback<Void>() {
             @Override
@@ -1108,6 +1115,71 @@ public class GrupoInventarioAdminFragment extends Fragment {
         return valor == null || valor.trim().isEmpty()
                 ? getString(R.string.detalle_grupo_titulo)
                 : valor.trim();
+    }
+
+    private Long obtenerUsuarioIdSesion() {
+        try {
+            SharedPreferences preferences = requireContext().getSharedPreferences("vigia_session", Context.MODE_PRIVATE);
+            long id = preferences.getLong("user_id", -1L);
+            return id > 0L ? id : null;
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private String obtenerUsuarioSesion() {
+        try {
+            SharedPreferences preferences = requireContext().getSharedPreferences("vigia_session", Context.MODE_PRIVATE);
+            String username = preferences.getString("username", "");
+            return username != null ? username.trim() : "";
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
+
+    private void guardarUsuarioIdSesion(Long userId) {
+        try {
+            SharedPreferences preferences = requireContext().getSharedPreferences("vigia_session", Context.MODE_PRIVATE);
+            preferences.edit().putLong("user_id", userId != null ? userId : -1L).apply();
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void resolverYGuardarUsuarioId(Runnable onComplete) {
+        if (apiService == null) {
+            if (onComplete != null) onComplete.run();
+            return;
+        }
+        String username = obtenerUsuarioSesion();
+        if (username == null || username.trim().isEmpty()) {
+            if (onComplete != null) onComplete.run();
+            return;
+        }
+        apiService.getUsuarios().enqueue(new Callback<List<com.example.vigiaapp.Archivos.Usuario>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<com.example.vigiaapp.Archivos.Usuario>> call,
+                                   @NonNull Response<List<com.example.vigiaapp.Archivos.Usuario>> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    if (onComplete != null) onComplete.run();
+                    return;
+                }
+                Long encontrado = null;
+                for (com.example.vigiaapp.Archivos.Usuario u : response.body()) {
+                    if (u == null || u.getUsuario() == null) continue;
+                    if (u.getUsuario().trim().equalsIgnoreCase(username.trim())) {
+                        encontrado = u.getId();
+                        break;
+                    }
+                }
+                if (encontrado != null) guardarUsuarioIdSesion(encontrado);
+                if (onComplete != null) onComplete.run();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<com.example.vigiaapp.Archivos.Usuario>> call, @NonNull Throwable t) {
+                if (onComplete != null) onComplete.run();
+            }
+        });
     }
 
     private void actualizarEstadoBotones() {

@@ -48,9 +48,16 @@ public class PanelUsuarioFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button btnInventarioUsuario = view.findViewById(R.id.btnInventarioUsuario);
+        Button btnHistorialUsuario = view.findViewById(R.id.btnHistorialUsuario);
         btnInventarioUsuario.setOnClickListener(v -> getParentFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, new InventarioFragment())
+                .addToBackStack(null)
+                .commit());
+
+        btnHistorialUsuario.setOnClickListener(v -> getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, new HistorialUsuarioFragment())
                 .addToBackStack(null)
                 .commit());
     }

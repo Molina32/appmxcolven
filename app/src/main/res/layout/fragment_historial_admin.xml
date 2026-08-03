@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:padding="20dp"
-    tools:context=".ReportesFragment">
+    android:padding="16dp"
+    tools:context=".HistorialAdminFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,38 +13,37 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnVerReporteProductos"
+            android:id="@+id/btnVerFecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/reporte_productos_ver" />
+            android:layout_marginBottom="10dp"
+            android:text="Ver fecha" />
 
         <Button
-            android:id="@+id/btnPdfProductos"
+            android:id="@+id/btnHistorialPorUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/reporte_productos_pdf" />
+            android:layout_marginBottom="10dp"
+            android:text="Historial por usuario" />
 
-        <TextView
-            android:id="@+id/tvEstadoReportes"
+        <Button
+            android:id="@+id/btnMostrarTodo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/reportes_estado_inicial"
-            android:textSize="14sp" />
+            android:layout_marginBottom="10dp"
+            android:text="Mostrar todo" />
 
-        <ProgressBar
-            android:id="@+id/progressReportes"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnBorrarHistorial"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:visibility="gone" />
+            android:text="Borrar historial" />
 
         <TextView
-            android:id="@+id/tvContenidoReporte"
+            android:id="@+id/tvHistorialContenido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:textSize="14sp" />
+            android:text="Cargando historial..." />
     </LinearLayout>
 </ScrollView>

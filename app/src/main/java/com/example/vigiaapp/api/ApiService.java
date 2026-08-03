@@ -21,6 +21,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // Endpoint de login (cambia el path si es diferente en tu API)
@@ -49,15 +50,16 @@ public interface ApiService {
 
     // Endpoint para crear grupo y permitir que el backend genere su tabla.
     @POST("inventario/grupos")
-    Call<Grupo> crearGrupo(@Body CrearGrupoRequest crearGrupoRequest);
+    Call<Grupo> crearGrupo(@Query("usuarioId") Long usuarioId, @Body CrearGrupoRequest crearGrupoRequest);
 
     // Endpoint para borrar un grupo y su tabla asociada.
     @DELETE("inventario/grupos/{id}")
-    Call<Void> eliminarGrupo(@Path("id") Long id);
+    Call<Void> eliminarGrupo(@Path("id") Long id, @Query("usuarioId") Long usuarioId);
 
     // Endpoint para editar el nombre del grupo y su tabla.
     @PUT("inventario/grupos/{identificador}/nombre")
     Call<Grupo> actualizarNombreGrupo(@Path("identificador") String identificador,
+                                      @Query("usuarioId") Long usuarioId,
                                       @Body ActualizarNombreGrupoRequest request);
 
     // Endpoint para listar registros guardados dentro de un grupo.
@@ -66,26 +68,32 @@ public interface ApiService {
 
     // Endpoint para guardar un registro dentro de un grupo.
     @POST("inventario/grupos/{identificador}/registros")
-    Call<Void> guardarRegistroGrupo(@Path("identificador") String identificador, @Body Map<String, Object> valores);
+    Call<Void> guardarRegistroGrupo(@Path("identificador") String identificador,
+                                    @Query("usuarioId") Long usuarioId,
+                                    @Body Map<String, Object> valores);
 
     // Endpoint para actualizar un registro dentro de un grupo.
     @PUT("inventario/grupos/{identificador}/registros/{registroId}")
     Call<Void> actualizarRegistroGrupo(@Path("identificador") String identificador,
                                        @Path("registroId") Long registroId,
+                                       @Query("usuarioId") Long usuarioId,
                                        @Body Map<String, Object> valores);
 
     @PUT("inventario/grupos/{identificador}/registros/{registroId}/stock/aumentar")
     Call<LinkedHashMap<String, Object>> aumentarStockRegistro(@Path("identificador") String identificador,
-                                                              @Path("registroId") Long registroId);
+                                                              @Path("registroId") Long registroId,
+                                                              @Query("usuarioId") Long usuarioId);
 
     @PUT("inventario/grupos/{identificador}/registros/{registroId}/stock/reducir")
     Call<LinkedHashMap<String, Object>> reducirStockRegistro(@Path("identificador") String identificador,
-                                                             @Path("registroId") Long registroId);
+                                                             @Path("registroId") Long registroId,
+                                                             @Query("usuarioId") Long usuarioId);
 
     // Endpoint para borrar un registro dentro de un grupo.
     @DELETE("inventario/grupos/{identificador}/registros/{registroId}")
     Call<Void> eliminarRegistroGrupo(@Path("identificador") String identificador,
-                                     @Path("registroId") Long registroId);
+                                     @Path("registroId") Long registroId,
+                                     @Query("usuarioId") Long usuarioId);
 
     // Endpoint para consultar columnas configuradas de un grupo.
     @GET("inventario/grupos/{identificador}/columnas")
@@ -94,5 +102,13 @@ public interface ApiService {
     // Endpoint para renombrar columnas existentes y agregar nuevas.
     @PUT("inventario/grupos/{identificador}/columnas")
     Call<Void> actualizarColumnasGrupo(@Path("identificador") String identificador,
+                                       @Query("usuarioId") Long usuarioId,
                                        @Body ActualizarColumnasGrupoRequest request);
+
+    @GET("inventario/historial/admin")
+    Call<List<LinkedHashMap<String, Object>>> getHistorialAdmin();
+
+    @DELETE("inventario/historial/admin")
+    Call<Void> borrarHistorialAdmin();
+
 }

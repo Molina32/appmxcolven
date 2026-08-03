@@ -105,7 +105,6 @@
     <string name="historial_stock_nuevo">Stock nuevo: %1$d</string>
     <string name="historial_fecha">Fecha: %1$s</string>
     <string name="reportes_titulo">Reportes</string>
-    <string name="movimientos_titulo">Movimientos</string>
     <string name="base_de_datos_titulo">Base de datos</string>
     <string name="cargar_bd">Cargar base de datos</string>
     <string name="copia_seguridad">Copia de seguridad</string>

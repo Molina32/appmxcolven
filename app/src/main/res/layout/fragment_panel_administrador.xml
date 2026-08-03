@@ -136,36 +136,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btnMovimientos"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:background="@drawable/bg_panel_admin_tile"
-            android:clickable="true"
-            android:elevation="3dp"
-            android:focusable="true"
-            android:gravity="center"
-            android:minHeight="150dp"
-            android:orientation="vertical"
-            android:padding="18dp">
-
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:contentDescription="@string/movimientos_titulo"
-                android:src="@drawable/movimientos" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="@string/movimientos_titulo"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/btnBaseDatos"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -50,8 +50,6 @@ public class ReportesAdminFragment extends Fragment {
     private ProgressBar progressReportes;
     private Button btnVerReporteProductos;
     private Button btnPdfProductos;
-    private Button btnVerReporteHistorial;
-    private Button btnPdfHistorial;
 
     public ReportesAdminFragment() {
     }
@@ -72,13 +70,9 @@ public class ReportesAdminFragment extends Fragment {
         progressReportes = view.findViewById(R.id.progressReportes);
         btnVerReporteProductos = view.findViewById(R.id.btnVerReporteProductos);
         btnPdfProductos = view.findViewById(R.id.btnPdfProductos);
-        btnVerReporteHistorial = view.findViewById(R.id.btnVerReporteHistorial);
-        btnPdfHistorial = view.findViewById(R.id.btnPdfHistorial);
 
         btnVerReporteProductos.setOnClickListener(v -> cargarReporteProductos(false));
         btnPdfProductos.setOnClickListener(v -> cargarReporteProductos(true));
-        btnVerReporteHistorial.setOnClickListener(v -> mostrarReporteHistorial(false));
-        btnPdfHistorial.setOnClickListener(v -> mostrarReporteHistorial(true));
     }
 
     private void cargarReporteProductos(boolean exportarPdf) {
@@ -187,41 +181,6 @@ public class ReportesAdminFragment extends Fragment {
                 cargarRegistrosDeGrupos(grupos, indice + 1, contenido, exportarPdf);
             }
         });
-    }
-
-    private void mostrarReporteHistorial(boolean exportarPdf) {
-        if (!isAdded()) {
-            return;
-        }
-
-        List<StockHistoryManager.HistoryItem> items = StockHistoryManager.obtenerHistorial(requireContext());
-        String reporte = construirReporteHistorial(items);
-        mostrarContenido(reporte);
-        if (exportarPdf) {
-            exportarPdf(getString(R.string.reportes_pdf_historial_nombre), reporte);
-        }
-    }
-
-    @NonNull
-    private String construirReporteHistorial(@NonNull List<StockHistoryManager.HistoryItem> items) {
-        if (items.isEmpty()) {
-            return getString(R.string.historial_vacio);
-        }
-
-        StringBuilder contenido = new StringBuilder();
-        for (int i = 0; i < items.size(); i++) {
-            StockHistoryManager.HistoryItem item = items.get(i);
-            contenido.append(getString(R.string.reportes_movimiento_item, i + 1));
-            contenido.append("\n");
-            contenido.append(getString(R.string.historial_grupo, item.grupo)).append("\n");
-            contenido.append(getString(R.string.historial_articulo, item.articulo)).append("\n");
-            contenido.append(getString(R.string.historial_tipo, item.tipo)).append("\n");
-            contenido.append(getString(R.string.historial_cambio, item.cambio)).append("\n");
-            contenido.append(getString(R.string.historial_stock_anterior, item.stockAnterior)).append("\n");
-            contenido.append(getString(R.string.historial_stock_nuevo, item.stockNuevo)).append("\n");
-            contenido.append(getString(R.string.historial_fecha, item.fechaTexto)).append("\n\n");
-        }
-        return contenido.toString().trim();
     }
 
     @NonNull
@@ -440,8 +399,6 @@ public class ReportesAdminFragment extends Fragment {
     private void actualizarBotones(boolean habilitados) {
         btnVerReporteProductos.setEnabled(habilitados);
         btnPdfProductos.setEnabled(habilitados);
-        btnVerReporteHistorial.setEnabled(habilitados);
-        btnPdfHistorial.setEnabled(habilitados);
     }
 
     @NonNull

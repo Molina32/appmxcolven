@@ -279,7 +279,7 @@ public class InventarioAdminFragment extends Fragment {
         tvEstadoGrupos.setVisibility(View.VISIBLE);
         tvEstadoGrupos.setText(R.string.grupo_creando);
 
-        apiService.crearGrupo(new CrearGrupoRequest(nombreGrupo, columnas)).enqueue(new Callback<Grupo>() {
+        apiService.crearGrupo(obtenerUsuarioIdSesion(), new CrearGrupoRequest(nombreGrupo, columnas)).enqueue(new Callback<Grupo>() {
             @Override
             public void onResponse(@NonNull Call<Grupo> call, @NonNull Response<Grupo> response) {
                 if (!isAdded()) {
@@ -524,7 +524,7 @@ public class InventarioAdminFragment extends Fragment {
         tvEstadoGrupos.setVisibility(View.VISIBLE);
         tvEstadoGrupos.setText(R.string.grupos_cargando);
 
-        apiService.eliminarGrupo(idGrupo).enqueue(new Callback<Void>() {
+        apiService.eliminarGrupo(idGrupo, obtenerUsuarioIdSesion()).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (!isAdded()) {
@@ -564,7 +564,7 @@ public class InventarioAdminFragment extends Fragment {
         tvEstadoGrupos.setVisibility(View.VISIBLE);
         tvEstadoGrupos.setText(R.string.grupos_cargando);
 
-        apiService.actualizarNombreGrupo(identificador, new ActualizarNombreGrupoRequest(nombreNuevo))
+        apiService.actualizarNombreGrupo(identificador, obtenerUsuarioIdSesion(), new ActualizarNombreGrupoRequest(nombreNuevo))
                 .enqueue(new Callback<Grupo>() {
                     @Override
                     public void onResponse(@NonNull Call<Grupo> call, @NonNull Response<Grupo> response) {
@@ -740,5 +740,15 @@ public class InventarioAdminFragment extends Fragment {
 
         String normalized = value.trim().toLowerCase().replace(' ', '_');
         return prefix + normalized;
+    }
+
+    private Long obtenerUsuarioIdSesion() {
+        try {
+            SharedPreferences preferences = requireContext().getSharedPreferences("vigia_session", Context.MODE_PRIVATE);
+            long id = preferences.getLong("user_id", -1L);
+            return id > 0L ? id : null;
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 }

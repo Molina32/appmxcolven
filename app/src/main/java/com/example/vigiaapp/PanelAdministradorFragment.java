@@ -51,7 +51,6 @@ public class PanelAdministradorFragment extends Fragment {
         View btnInventarioAdmin = view.findViewById(R.id.btnInventarioAdmin);
         View btnHistorial = view.findViewById(R.id.btnHistorial);
         View btnReportes = view.findViewById(R.id.btnReportes);
-        View btnMovimientos = view.findViewById(R.id.btnMovimientos);
         View btnBaseDatos = view.findViewById(R.id.btnBaseDatos);
 
         btnUsuarios.setOnClickListener(v -> getParentFragmentManager()
@@ -75,12 +74,6 @@ public class PanelAdministradorFragment extends Fragment {
         btnReportes.setOnClickListener(v -> getParentFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, new ReportesAdminFragment())
-                .addToBackStack(null)
-                .commit());
-
-        btnMovimientos.setOnClickListener(v -> getParentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, new MovimientosAdminFragment())
                 .addToBackStack(null)
                 .commit());
 
